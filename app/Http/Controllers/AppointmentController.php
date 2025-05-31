@@ -1,37 +1,70 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+
 class AppointmentController extends Controller
 {
+    // Liste tous les rendez-vous avec pagination, sans restriction utilisateur
     public function index()
-{
-    return Inertia::render('Appointments/Index', [
-        'appointments' => Appointment::where('user_id', auth()->id())->get(),
-    ]);
-}
+    {
+        $appointments = Appointment::orderBy('appointment_time', 'desc')->paginate(10);
 
-public function create()
-{
-    return Inertia::render('Appointments/Create');
-}
+        return Inertia::render('Appointments/Index', [
+            'appointments' => $appointments,
+        ]);
+    }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'title' => 'required',
-        'appointment_time' => 'required|date',
-    ]);
+    // Affiche le formulaire de création
+    public function create()
+    {
+        return Inertia::render('Appointments/Create');
+    }
 
-    Appointment::create([
-        'user_id' => auth()->id(),
-        'title' => $request->title,
-        'description' => $request->description,
-        'appointment_time' => $request->appointment_time,
-    ]);
+    // Enregistre un nouveau rendez-vous
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'appointment_time' => 'required|date|after:now',
+        ]);
 
-    return redirect()->route('appointments.index')->with('success', 'Appointment created.');
-}
+        Appointment::create($request->only('title', 'description', 'appointment_time'));
 
+        return redirect()->route('appointments.index')->with('success', 'Rendez-vous créé avec succès.');
+    }
+
+    // Affiche le formulaire d'édition d'un rendez-vous (admin a accès à tous)
+    public function edit(Appointment $appointment)
+    {
+        return Inertia::render('Appointments/Edit', [
+            'appointment' => $appointment,
+        ]);
+    }
+
+    // Met à jour un rendez-vous
+    public function update(Request $request, Appointment $appointment)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'appointment_time' => 'required|date|after:now',
+        ]);
+
+        $appointment->update($request->only('title', 'description', 'appointment_time'));
+
+        return redirect()->route('appointments.index')->with('success', 'Rendez-vous mis à jour.');
+    }
+
+    // Supprime un rendez-vous
+    public function destroy(Appointment $appointment)
+    {
+        $appointment->delete();
+
+        return redirect()->route('appointments.index')->with('success', 'Rendez-vous supprimé.');
+    }
 }

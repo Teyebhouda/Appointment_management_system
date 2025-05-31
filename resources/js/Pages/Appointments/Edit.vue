@@ -1,23 +1,29 @@
 <script setup>
 import DashboardLayout from '@/Layouts/DashboardLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+
+const { appointment } = usePage().props;
+
+const formatDateTimeLocal = (datetime) => {
+  return datetime ? new Date(datetime).toISOString().slice(0,16) : '';
+}
 
 const form = useForm({
-  title: '',
-  description: '',
-  appointment_time: '',
+  title: appointment.title,
+  description: appointment.description || '',
+  appointment_time: formatDateTimeLocal(appointment.appointment_time),
 });
 
 function submit() {
-  form.post(route('appointments.store'));
+  form.put(route('appointments.update', appointment.id));
 }
 </script>
 
 <template>
   <DashboardLayout>
-    <Head title="Créer un rendez-vous" />
+    <Head title="Modifier un rendez-vous" />
 
-    <h1 class="text-2xl font-bold mb-4">Créer un rendez-vous</h1>
+    <h1 class="text-2xl font-bold mb-4">Modifier le rendez-vous</h1>
 
     <form @submit.prevent="submit" class="space-y-4 max-w-md">
       <div>
@@ -52,7 +58,7 @@ function submit() {
       </div>
 
       <div class="flex space-x-4">
-        <button type="submit" class="btn btn-primary" :disabled="form.processing">Créer</button>
+        <button type="submit" class="btn btn-primary" :disabled="form.processing">Mettre à jour</button>
         <Link href="/appointments" class="btn btn-secondary">Annuler</Link>
       </div>
     </form>

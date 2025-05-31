@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,7 +24,7 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
        Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
-    Route::get('/appointments', fn () => Inertia::render('Appointments/Index'))->name('appointments');
+    Route::resource('appointments', AppointmentController::class);
     Route::get('/users', fn () => Inertia::render('Users/Index'))->name('users');
     Route::get('/settings', fn () => Inertia::render('Settings/Index'))->name('settings');
 });

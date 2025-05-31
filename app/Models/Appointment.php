@@ -46,4 +46,5 @@ class Appointment extends Model
     {
         return $query->where('status', 'cancelled');
     }
+    
 }

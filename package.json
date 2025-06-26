@@ -7,7 +7,7 @@
         "dev": "vite"
     },
     "devDependencies": {
-        "@inertiajs/vue3": "^2.0.0",
+        "@inertiajs/vue3": "^2.0.11",
         "@tailwindcss/forms": "^0.5.3",
         "@tailwindcss/vite": "^4.0.0",
         "@vitejs/plugin-vue": "^5.0.0",
@@ -24,6 +24,7 @@
         "@fullcalendar/daygrid": "^6.1.17",
         "@fullcalendar/interaction": "^6.1.17",
         "@fullcalendar/vue3": "^6.1.17",
+        "@inertiajs/inertia": "^0.11.1",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "lucide-vue-next": "^0.511.0",

@@ -17,10 +17,15 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
+    protected $table = 'users'; // Spécifie la table associée au modèle
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role', // Ajout du champ role
+        'is_active', // Ajout du champ is_active
+        'last_login_at', // Ajout du champ last_login_at
+        
     ];
 
     /**

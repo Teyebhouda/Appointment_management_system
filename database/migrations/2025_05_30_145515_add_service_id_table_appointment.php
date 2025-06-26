@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Step 1: Add the service_id column as nullable, without foreign key constraint
         Schema::table('appointments', function (Blueprint $table) {
             $table->foreignId('service_id')
-                ->constrained('services')
-                ->onDelete('cascade')
+                ->nullable()
                 ->after('user_id')
                 ->comment('ID du service associé à ce rendez-vous');
             $table->string('status')->default('pending')->comment('Statut du rendez-vous : pending, confirmed, cancelled, completed');
@@ -24,6 +24,18 @@ return new class extends Migration
             $table->timestamp('pending_at')->nullable()->comment('Date et heure de la mise en attente du rendez-vous');
             $table->timestamps();
             $table->index(['service_id', 'status'], 'appointments_service_status_index');       
+        });
+
+        // Step 2: Update existing rows to set a valid service_id (replace 1 with a valid service id)
+        DB::table('appointments')->whereNull('service_id')->update(['service_id' => 1]);
+
+        // Step 3: Make the column not nullable and add the foreign key constraint
+        Schema::table('appointments', function (Blueprint $table) {
+            $table->unsignedBigInteger('service_id')->nullable(false)->change();
+            $table->foreign('service_id')
+                ->references('id')
+                ->on('services')
+                ->onDelete('cascade');
         });
     }
 

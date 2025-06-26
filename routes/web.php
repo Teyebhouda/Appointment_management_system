@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClientController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,9 +26,14 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-       Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
+    Route::get('/dashboard', fn () => Inertia::render('Dashboard'))->name('dashboard');
     Route::resource('appointments', AppointmentController::class);
-    Route::get('/users', fn () => Inertia::render('Users/Index'))->name('users');
+    Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+    Route::resource('services', ServiceController::class);
+   // Route::get('/users', fn () => Inertia::render('Users/Index'))->name('users');
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::resource('clients', ClientController::class);  
+
     Route::get('/settings', fn () => Inertia::render('Settings/Index'))->name('settings');
 });
 

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('services', function (Blueprint $table) {
+        Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique()->comment('Nom du service, ex : Consultation');
             $table->text('description')->nullable()->comment('Description du service');

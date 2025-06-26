@@ -10,8 +10,28 @@ import 'vue-toastification/dist/index.css';
 import { createPinia } from 'pinia'
 // 👇 Import all Lucide icons
 import * as lucide from 'lucide-vue-next';
+import DashboardLayout from '@/Layouts/DashboardLayout.vue'
+
+// 1) Créez l’application Vue et ajoutez Pinia
+const pinia = createPinia()
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+
+createInertiaApp({
+  resolve: name => require(`./Pages/${name}`).default,
+  setup({ el, App, props, plugin }) {
+    const vueApp = createApp({ render: () => h(App, props) })
+    vueApp.use(plugin)
+    vueApp.use(pinia)
+    vueApp.component('DashboardLayout', DashboardLayout)
+    vueApp.mount(el)
+  },
+})
+
+
+
+
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

@@ -9,7 +9,7 @@
         <span v-if="isDark">🌙</span>
         <span v-else>☀️</span>
       </button>
- Welcome, {{ userStore.user?.name }}
+  <span>Bienvenue, {{ userStore.user?.name || 'Invité' }}</span>
       <Link href="/logout" method="post" as="button" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
         Logout
       </Link>

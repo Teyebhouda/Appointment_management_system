@@ -7,7 +7,7 @@
           v-for="service in services"
           :key="service.id"
           class="bg-white p-6 rounded-lg shadow cursor-pointer hover:shadow-lg transition"
-          @click="selectService(service)"
+          @click="selectService(service)" data-aos="zoom-in"
         >
           <div class="mb-4 text-primary-600">
             <component :is="getIcon(service.icon)" class="w-12 h-12 mx-auto" />

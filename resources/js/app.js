@@ -11,6 +11,8 @@ import { createPinia } from 'pinia'
 // 👇 Import all Lucide icons
 import * as lucide from 'lucide-vue-next';
 import DashboardLayout from '@/Layouts/DashboardLayout.vue'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 // 1) Créez l’application Vue et ajoutez Pinia
 const pinia = createPinia()
@@ -59,4 +61,10 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+});
+AOS.init({
+    duration: 1000, // Durée de l'animation en millisecondes
+    once: true, // L'animation ne se déclenche qu'une seule fois
+    disable: 'mobile', // Désactiver sur mobile
+    easing: 'ease-in-out', // Type d'animation
 });

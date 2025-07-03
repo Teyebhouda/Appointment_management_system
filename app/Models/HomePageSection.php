@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class HomePageSection extends Model
 {
     
+    
     protected $table = 'home_page_sections';
 
     protected $fillable = [

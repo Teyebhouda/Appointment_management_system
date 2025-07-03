@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('section_key')->unique()->comment('Unique key for the section');
             $table->json('content')->nullable()->comment('Content of the section in JSON format');
-            $table->timestamps(0)->comment('Timestamps for created_at and updated_at');
+            $table->timestamps();
         });
     }
 

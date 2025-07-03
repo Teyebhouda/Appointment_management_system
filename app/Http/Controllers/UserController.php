@@ -16,7 +16,7 @@ class UserController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
            // dd($users);
-         return Inertia::render('Users/Index', [
+         return Inertia::render('Admin/Users/Index', [
             'users' => $users ]);
          }
         

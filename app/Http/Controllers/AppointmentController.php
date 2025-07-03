@@ -16,7 +16,7 @@ class AppointmentController extends Controller
     {
         $appointments = Appointment::orderBy('appointment_time', 'desc')->with('service','user')->paginate(10);
 
-        return Inertia::render('Appointments/Index', [
+        return Inertia::render('Admin/Appointments/Index', [
             'appointments' => $appointments,
         ]);
     }
@@ -38,7 +38,7 @@ class AppointmentController extends Controller
             $users = User::all(); // Récupère tous les utilisateurs pour le formulaire de création
         }
 
-        return Inertia::render('Appointments/Create', [
+        return Inertia::render('Admin/Appointments/Create', [
             'services' => $services,
             'users' => $users, // Récupère tous les utilisateurs pour le formulaire de création
         ]);
@@ -82,7 +82,7 @@ class AppointmentController extends Controller
         }
        
 
-        return Inertia::render('Appointments/Edit', [
+        return Inertia::render('Admin/Appointments/Edit', [
             'appointment' => $appointment,
             'services' => $services,
             'users' => $users, // Récupère tous les utilisateurs pour le formulaire d'édition

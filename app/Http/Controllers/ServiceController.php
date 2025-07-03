@@ -18,7 +18,7 @@ class ServiceController extends Controller
     {
        $services =Service::orderBy('created_at', 'desc')->paginate(10);
 
-       return Inertia::render('Services/Index', [
+       return Inertia::render('Admin/Services/Index', [
         'services' => $services,
         'filters' => request()->all('search', 'trashed'),
         'trashed' => request()->boolean('trashed', false),
@@ -38,7 +38,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Services/Create');
+        return Inertia::render('Admin/Services/Create');
     
     }
 
@@ -73,7 +73,7 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
 
-        return Inertia::render('Services/Show', [
+        return Inertia::render('Admin/Services/Show', [
             'service' => $service,
         ]);
     }
@@ -88,7 +88,7 @@ class ServiceController extends Controller
     {
         $service = Service::findOrFail($id);
 
-        return Inertia::render('Services/Edit', [
+        return Inertia::render('Admin/Services/Edit', [
             'service' => $service,
         ]);
     }

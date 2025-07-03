@@ -5,6 +5,8 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -38,6 +40,21 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::resource('clients', ClientController::class);  
 
     Route::get('/settings', fn () => Inertia::render('Settings/Index'))->name('settings');
+
+   Route::get('/homePage', [HomeController::class, 'index'])->name('homepage.index');
+
+    // Affiche le formulaire d'édition d'une section
+    Route::get('/homePage/{sectionKey}/edit', [HomeController::class, 'edit'])->name('homepage.edit');
+
+    // Met à jour la section (PUT)
+    Route::put('/homePage/{sectionKey}', [HomeController::class, 'update'])->name('homepage.update');
+
+    // (Optionnel) création de nouvelle section
+    Route::get('/homePage/create', [HomeController::class, 'create'])->name('homepage.create');
+    Route::post('/homePage', [HomeController::class, 'store'])->name('homepage.store');
+
+
+    
 });
 
 require __DIR__.'/auth.php';

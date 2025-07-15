@@ -52,6 +52,7 @@ import HeroSectionForm from './Partials/HeroSectionForm.vue'
 import FooterForm from './Partials/FooterForm.vue'
 import HowItWorkForm from './Partials/HowItWorkForm.vue'
 import ServicesForm from './Partials/ServicesForm.vue'
+import TeamForm from './Partials/TeamForm.vue'
 
 // Props
 const props = defineProps({
@@ -71,11 +72,13 @@ const sectionComponents = {
   footer: FooterForm,
   howItWork: HowItWorkForm,
   services: ServicesForm,
+  teamMembers: TeamForm
 }
 
 // Charger les données de la section sélectionnée
 function loadSectionData(sectionKey) {
-  const data = props.sections[sectionKey]?.content || {}
+  const data = props.sections[sectionKey] || {}
+  console.log('Chargement des données pour la section:', sectionKey, data)
   Object.keys(form).forEach(key => delete form[key])
   Object.assign(form, data)
 }
@@ -87,7 +90,7 @@ function submit() {
   processing.value = true
   Inertia.put(
     route('admin.homepage.update', activeSection.value),
-    { content: { ...form } },
+  { ...form },
     {
       onFinish: () => {
         processing.value = false
@@ -103,6 +106,7 @@ function formatLabel(key) {
     footer: 'Pied de page',
     howItWork: 'Fonctionnement',
     services: 'Services',
+    teamMembers: 'Équipe'
   }
   return labels[key] || key
 }

@@ -8,18 +8,22 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
-    {
-        $sections = HomePageSection::all()->mapWithKeys(function ($section) {
-            return [$section->section_key => $section->content];
-        });
-       
-        return Inertia::render('Admin/HomePage/edit', [
-            'sections' => $sections,
+ public function index()
+{
+    $sections = HomePageSection::all()->mapWithKeys(function ($section) {
+        // On ne décode que si c'est une chaîne JSON
+        $content = $section->content;
+        if (is_string($content)) {
             
-        ]); 
+            $content = json_decode($content, true);
+        }
+        return [$section->section_key => $content];
+    })->toArray();
 
-    }
+    return Inertia::render('Admin/HomePage/edit', [
+        'sections' => $sections,
+    ]);
+}
     public function show($sectionKey)
     {
         $section = HomePageSection::where('section_key', $sectionKey)->firstOrFail();
@@ -39,7 +43,7 @@ class HomeController extends Controller
     public function update(Request $request, $sectionKey)
     {
         $data = $this->getValidatedData($request, $sectionKey);
-
+//dd($data, $sectionKey, $request->all());
     HomePageSection::updateOrCreate(
         ['section_key' => $sectionKey],
         ['content' => json_encode($data)]
@@ -89,6 +93,19 @@ class HomeController extends Controller
                 'items.*.name' => 'required|string|max:100',
                 'items.*.comment' => 'required|string|max:500',
                 'items.*.photo' => 'nullable|url',
+            ]);
+        case 'team':
+            return $request->validate([
+                'title' => 'nullable|string|max:255',
+                'members' => 'required|array|min:1',
+                'members.*.name' => 'required|string|max:100',
+                'members.*.role' => 'required|string|max:100',
+                'members.*.photo' => 'nullable|url',
+                'members.github' => 'nullable|url|max:255',
+                'members.twitter' => 'nullable|url|max:255',
+                'members.instagram' => 'nullable|url|max:255',
+
+
             ]);
 
            case 'footer':

@@ -1,19 +1,19 @@
 <template>
-  <form @submit.prevent="submit" class="space-y-6 ">
+  <form @submit.prevent="submit" class="space-y-6">
     <div>
       <label class="block font-semibold mb-1">Titre du footer</label>
-      <input v-model="form.title" type="text" class="input" />
+      <input v-model="localForm.title" type="text" class="input" />
     </div>
 
     <div>
       <label class="block font-semibold mb-1">Description</label>
-      <textarea v-model="form.description" class="input" rows="3" />
+      <textarea v-model="localForm.description" class="input" rows="3" />
     </div>
 
     <div>
       <label class="block font-semibold mb-2">Liens</label>
       <div
-        v-for="(link, index) in form.links"
+        v-for="(link, index) in localForm.links"
         :key="index"
         class="border p-4 rounded mb-4 relative"
       >
@@ -42,37 +42,34 @@
   </form>
 </template>
 
+
 <script setup>
-import { useForm } from '@inertiajs/vue3'
+import { computed } from 'vue'
 
 const props = defineProps({
-  initialData: Object,
+  form: Object,
 })
+const emit = defineEmits(['update:form'])
 
-const data = props.initialData?.content || {}
-
-const form = useForm({
-  title: data.title || '',
-  description: data.description || '',
-  links: data.links?.length
-    ? props.initialData.content.links
-    : [
-        { title: '', url: '' },
-      ],
+const localForm = computed({
+  get: () => props.form,
+  set: (value) => emit('update:form', value),
 })
 
 function addLink() {
-  form.links.push({ title: '', url: '' })
+  localForm.value.links.push({ title: '', url: '' })
 }
 
 function removeLink(index) {
-  form.links.splice(index, 1)
+  localForm.value.links.splice(index, 1)
 }
 
 function submit() {
-  form.submit('post', `/home/sections/${props.initialData.section_key}`)
+  // Ici, la soumission est gérée par le composant parent
+  // Donc tu peux soit ne rien faire ici, soit appeler une méthode de validation
 }
 </script>
+
 
 <style scoped>
 .input {

@@ -29,4 +29,11 @@ class HomePageSection extends Model
     {
         return self::where('section_key', $key)->first()?->content;
     }
+
+
+    public function getContentAttribute($value)
+{
+    return json_decode($value, true);
+}
+
 }

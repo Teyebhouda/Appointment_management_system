@@ -6,22 +6,15 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Front\FrontHomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});*/
-Route::get('/', function () {
-    return Inertia::render('Frontend/Home');
-})->name('home');
+
+Route::get('/', [FrontHomeController::class, 'index'])
+    ->name('home');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -46,10 +39,10 @@ Route::middleware('auth', 'verified')->group(function () {
     // Affiche le formulaire d'édition d'une section
     Route::get('/homePage/{sectionKey}/edit', [HomeController::class, 'edit'])->name('homepage.edit');
 
-    // Met à jour la section (PUT)
-    Route::put('/homePage/{sectionKey}', [HomeController::class, 'update'])->name('homepage.update');
-
-    // (Optionnel) création de nouvelle section
+   
+    // Add admin.homepage.update route for Ziggy compatibility
+    Route::put('/admin/homePage/{sectionKey}/update', [HomeController::class, 'update'])->name('admin.homepage.update');
+    
     Route::get('/homePage/create', [HomeController::class, 'create'])->name('homepage.create');
     Route::post('/homePage', [HomeController::class, 'store'])->name('homepage.store');
 

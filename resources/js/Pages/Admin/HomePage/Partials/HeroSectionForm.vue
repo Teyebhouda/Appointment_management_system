@@ -2,6 +2,7 @@
 defineProps({
   form: Object
 })
+
 </script>
 
 <template>

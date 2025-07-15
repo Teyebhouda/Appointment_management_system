@@ -1,3 +1,5 @@
+
+
 <template>
   <form @submit.prevent="submit" class="space-y-6">
     <div>
@@ -31,21 +33,8 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
 
-const props = defineProps({
-  initialData: Object,
-})
-// Initialize form with initial data or default values
-// If initialData is not provided, use empty strings or default values  
-const data = props.initialData?.content || {}
-
-const form = useForm({
-  title: data.title || '',
-  subtitle: data.subtitle || '',
-  steps: data.steps || [
-    { icon: '', title: '', description: '' },
-    { icon: '', title: '', description: '' },
-    { icon: '', title: '', description: '' },
-  ],
+defineProps({
+  form: Object
 })
 
 function submit() {

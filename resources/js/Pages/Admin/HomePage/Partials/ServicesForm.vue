@@ -2,12 +2,12 @@
   <form @submit.prevent="submit" class="space-y-6">
     <div>
       <label class="block font-semibold mb-1">Titre de la section</label>
-      <input v-model="form.title" type="text" class="input" />
+      <input v-model="localForm.title" type="text" class="input" />
     </div>
 
     <div>
       <label class="block font-semibold mb-2">Services</label>
-      <div v-for="(item, index) in form.items" :key="index" class="border p-4 rounded mb-4 relative">
+      <div v-for="(item, index) in localForm.items" :key="index" class="border p-4 rounded mb-4 relative">
         <button
           type="button"
           class="absolute top-2 right-2 text-red-600 font-bold"
@@ -30,38 +30,35 @@
       <button type="button" class="btn-secondary" @click="addItem">+ Ajouter un service</button>
     </div>
 
-    <button type="submit" class="btn-primary">Enregistrer</button>
   </form>
 </template>
 
+
 <script setup>
-import { reactive } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { computed } from 'vue'
 
 const props = defineProps({
-  initialData: Object,
+  form: Object
 })
-const data = props.initialData?.content || {}
 
-const form = useForm({
-  title: data.title || '',
-  items: data.items?.length ? props.initialData.content.items : [
-    { title: '', description: '', icon: '' },
-  ],
+const emit = defineEmits(['update:form'])
+
+const localForm = computed({
+  get: () => props.form,
+  set: (value) => emit('update:form', value)
 })
 
 function addItem() {
-  form.items.push({ title: '', description: '', icon: '' })
+  localForm.value.items.push({ title: '', description: '', icon: '' })
 }
 
 function removeItem(index) {
-  form.items.splice(index, 1)
+  localForm.value.items.splice(index, 1)
 }
 
-function submit() {
-  form.submit('post', `/home/sections/${props.initialData.section_key}`)
-}
+
 </script>
+
 
 <style scoped>
 .input {

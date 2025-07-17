@@ -42,42 +42,42 @@ function selectService(service) {
         {{ content.title }}
       </h2>
 
-      <Swiper
-        :modules="[Autoplay]"
-        :spaceBetween="24"
-        :loop="true"
-        :autoplay="{ delay: 2500, disableOnInteraction: false }"
-        :breakpoints="{
-          640: { slidesPerView: 1 },
-          768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 }
-        }"
-        class="mySwiper"
-      >
-        <SwiperSlide
-          v-for="(service, index) in content.items"
+      <!-- ✅ Nouvelle grille -->
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          v-for="(service, index) in content.items.slice(0, 6)"
           :key="index"
+          class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition group"
+          data-aos="fade-up"
         >
-          <div
-            class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition cursor-pointer"
-            @click="selectService(service)"
-            data-aos="zoom-in"
-          >
-            <div class="mb-4 text-primary-600">
-              <component
-                :is="getIcon(service.icon)"
-                class="w-12 h-12 mx-auto"
-              />
-            </div>
-            <h3 class="text-xl font-semibold mb-2 text-center">
-              {{ service.title }}
-            </h3>
-            <p class="text-gray-600 text-center">
-              {{ service.description }}
-            </p>
+          <div class="mb-4 text-primary-600 flex justify-center">
+            <component :is="getIcon(service.icon)" class="w-12 h-12 group-hover:scale-110 transition" />
           </div>
-        </SwiperSlide>
-      </Swiper>
+          <h3 class="text-xl font-semibold text-center mb-2 text-gray-900">
+            {{ service.title }}
+          </h3>
+          <p class="text-gray-600 text-center mb-4">{{ service.description }}</p>
+          <div class="text-center">
+            <button
+              @click="selectService(service)"
+              class="inline-flex items-center px-4 py-2 bg-primary-600 text-black rounded-lg text-sm font-medium hover:bg-primary-700 transition"
+            >
+              Prendre rendez-vous
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✅ Bouton Voir tous -->
+      <div class="mt-10 text-center">
+        <a
+          href="/services"
+          class="inline-block px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-semibold rounded-md transition"
+        >
+          Voir tous les services
+        </a>
+      </div>
     </div>
   </section>
 </template>
+

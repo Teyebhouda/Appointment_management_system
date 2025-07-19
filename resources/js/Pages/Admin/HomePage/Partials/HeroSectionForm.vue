@@ -1,8 +1,25 @@
 <script setup>
-defineProps({
+import { toRefs, ref, watch } from 'vue'
+
+const props = defineProps({
   form: Object
 })
 
+const { form } = toRefs(props)
+
+const imagePreview = ref(form.value.background_image ?? '')
+
+watch(() => form.value.background_image, (newVal) => {
+  imagePreview.value = newVal // actualise si l'image change côté serveur
+})
+
+function onImageChange(e) {
+  const file = e.target.files[0]
+  if (file) {
+    imagePreview.value = URL.createObjectURL(file)
+    form.value.background_image_file = file // pour l'envoi
+  }
+}
 </script>
 
 <template>
@@ -19,10 +36,14 @@ defineProps({
       Texte du bouton
       <input v-model="form.button_text" type="text" class="input" />
     </label>
-    <label>
-      Image de fond (URL)
-      <input v-model="form.background_image" type="url" class="input" />
+     <label>
+      Image de fond
+      <input type="file" @change="onImageChange" />
     </label>
+
+    <div v-if="imagePreview" class="mt-2">
+      <img :src="imagePreview" alt="Aperçu" class="rounded shadow max-h-60" />
+    </div>
   </div>
 </template>
 

@@ -40,18 +40,25 @@ class HomeController extends Controller
             'section' => $section,
         ]);
     }
-    public function update(Request $request, $sectionKey)
-    {
-        $data = $this->getValidatedData($request, $sectionKey);
-//dd($data, $sectionKey, $request->all());
+   public function update(Request $request, $sectionKey)
+{
+    $data = $this->getValidatedData($request, $sectionKey);
+
+    // Gérer l'image
+    if ($request->hasFile('background_image')) {
+        $path = $request->file('background_image')->store('uploads', 'public');
+        $data['background_image'] = asset('storage/' . $path); // URL accessible
+    }
+
+ 
     HomePageSection::updateOrCreate(
         ['section_key' => $sectionKey],
         ['content' => json_encode($data)]
     );
 
     return redirect()->back()->with('success', ucfirst($sectionKey).' section mise à jour !');
+}
 
-    }
 
 
 
@@ -63,7 +70,7 @@ class HomeController extends Controller
                 'title' => 'nullable|string|max:255',
                 'subtitle' => 'nullable|string|max:500',
                 'button_text' => 'nullable|string|max:100',
-                'background_image' => 'nullable|url',
+               'background_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             ]);
 
        case 'howItWork':

@@ -53,6 +53,9 @@ import FooterForm from './Partials/FooterForm.vue'
 import HowItWorkForm from './Partials/HowItWorkForm.vue'
 import ServicesForm from './Partials/ServicesForm.vue'
 import TeamForm from './Partials/TeamForm.vue'
+import AboutUsForm from './Partials/AboutUsForm.vue'
+import Testimonials from './Partials/TestimonialsForm.vue'
+
 
 // Props
 const props = defineProps({
@@ -72,7 +75,9 @@ const sectionComponents = {
   footer: FooterForm,
   howItWork: HowItWorkForm,
   services: ServicesForm,
-  teamMembers: TeamForm
+  teamMembers: TeamForm,
+  AboutUs: AboutUsForm,
+  testimonials: Testimonials
 }
 
 // Charger les données de la section sélectionnée
@@ -88,15 +93,26 @@ watch(activeSection, loadSectionData, { immediate: true })
 const processing = ref(false)
 function submit() {
   processing.value = true
-  Inertia.put(
-    route('admin.homepage.update', activeSection.value),
-  { ...form },
-    {
-      onFinish: () => {
-        processing.value = false
-      },
-    }
-  )
+  const formData = new FormData()
+
+for (const key in form) {
+  // Ne pas envoyer l'image preview URL
+  if (key === 'background_image_file' && form[key] instanceof File) {
+    formData.append('background_image', form[key])
+  } else {
+    formData.append(key, form[key])
+  }
+}
+
+formData.append('_method', 'PUT') // car Inertia utilise PUT
+
+Inertia.post(route('admin.homepage.update', activeSection.value), formData, {
+  forceFormData: true,
+  onFinish: () => {
+    processing.value = false
+  }
+})
+  console.log('Données soumises pour la section:', activeSection.value, form)
 }
 
 // Formatage des labels
@@ -106,7 +122,9 @@ function formatLabel(key) {
     footer: 'Pied de page',
     howItWork: 'Fonctionnement',
     services: 'Services',
-    teamMembers: 'Équipe'
+    teamMembers: 'Équipe',
+    AboutUs: 'À propos de nous',
+    testimonials: 'Témoignages',
   }
   return labels[key] || key
 }
